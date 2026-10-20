@@ -4,8 +4,20 @@ import Foundation
 /// Ranges a single iBeacon and publishes the estimated distance in meters.
 final class BeaconScanner: NSObject, ObservableObject, CLLocationManagerDelegate {
 
-  // MARK: - Konfiguracja — PODMIEŃ NA UUID SWOJEGO iBEACONA
-  static let beaconUUID = UUID(uuidString: "FDA50693-A4E2-4FB1-AFCF-C6EB07647825")!
+  // MARK: - Konfiguracja — UUID swojego iBeacona (z myślnikami lub bez)
+  static let beaconUUIDString = "e2c56db5dffb48d2b060d0f5a71096e0"
+
+  static let beaconUUID: UUID = {
+    let hex = beaconUUIDString.replacingOccurrences(of: "-", with: "")
+    precondition(hex.count == 32, "UUID musi mieć 32 znaki hex")
+    let i = hex.startIndex
+    func part(_ from: Int, _ to: Int) -> String {
+      String(hex[hex.index(i, offsetBy: from)..<hex.index(i, offsetBy: to)])
+    }
+    let formatted = [part(0, 8), part(8, 12), part(12, 16), part(16, 20), part(20, 32)]
+      .joined(separator: "-")
+    return UUID(uuidString: formatted)!
+  }()
 
   enum State: Equatable {
     case waitingForPermission
