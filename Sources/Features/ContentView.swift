@@ -1,33 +1,36 @@
 import SwiftUI
 
-/// Minimal starter screen — replace with your app. It exists so the template
-/// builds, runs, and ships an IPA out of the box.
+/// Single screen: shows only the distance to the iBeacon.
 struct ContentView: View {
-  @State private var taps = 0
+  @StateObject private var scanner = BeaconScanner()
 
   var body: some View {
-    NavigationStack {
-      VStack(spacing: 24) {
-        Image(systemName: "swift")
-          .font(.system(size: 72))
-          .foregroundStyle(.tint)
-          .symbolEffect(.bounce, value: taps)
-
-        Text("Hello, iOS 👋")
-          .font(.largeTitle.bold())
-
-        Text("You tapped \(taps) time\(taps == 1 ? "" : "s").")
-          .foregroundStyle(.secondary)
-          .contentTransition(.numericText())
-
-        Button("Tap me") {
-          withAnimation(.snappy) { taps += 1 }
-        }
-        .buttonStyle(.borderedProminent)
-        .controlSize(.large)
-      }
+    Text(text)
+      .font(.system(size: 64, weight: .bold, design: .rounded))
+      .monospacedDigit()
+      .minimumScaleFactor(0.4)
+      .lineLimit(2)
+      .multilineTextAlignment(.center)
       .padding()
-      .navigationTitle("AppName")
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .contentTransition(.numericText())
+      .animation(.snappy, value: text)
+      .onAppear { scanner.start() }
+      .onDisappear { scanner.stop() }
+  }
+
+  private var text: String {
+    switch scanner.state {
+    case .distance(let meters):
+      return String(format: "%.1f m", meters)
+    case .searching:
+      return "Szukam…"
+    case .waitingForPermission:
+      return "…"
+    case .denied:
+      return "Brak zgody na lokalizację"
+    case .bluetoothOrLocationOff:
+      return "Włącz Bluetooth i lokalizację"
     }
   }
 }
