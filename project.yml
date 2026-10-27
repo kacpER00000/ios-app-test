@@ -44,6 +44,7 @@ targets:
         INFOPLIST_KEY_UILaunchScreen_Generation: "YES"
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Lokalizacja jest potrzebna do pomiaru odległości od iBeacona."
         INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown"
+        INFOPLIST_KEY_NSCameraUsageDescription: "Kamera jest potrzebna do wyświetlania obiektów 3D w rozszerzonej rzeczywistości."
 
   TestowanieWgrywaniaTests:
     type: bundle.unit-test
