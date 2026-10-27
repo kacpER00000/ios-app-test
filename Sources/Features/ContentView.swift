@@ -58,7 +58,7 @@ struct ARViewContainer: UIViewRepresentable {
 
     func updateUIView(_ uiView: ARView, context: Context) {
         if case let .distance(distance) = scanner.state,
-           distance < 1.0 {
+           distance < 2.5 {
 
             guard context.coordinator.anchorEntity == nil else {
                 return
